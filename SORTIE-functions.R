@@ -89,9 +89,7 @@ import.SORTIE.output <- function(yr,folder.path,root.name){
   dt <- data.table()
   yr <- yr
   for(i in 1:(yr+1)){
-    #dt_0 <- fread(paste0(fl.name,0), sep="\t", header=T,na.strings = "--", skip=1)
     dt <- fread(paste0(fl.name,i-1), sep="\t", header=T,na.strings = "--", skip=1)
-    #timestep <- i-1
     dt[, timestep := i-1]
     dt_list[i] <- list(dt)
   }
