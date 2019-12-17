@@ -51,7 +51,7 @@ Plot.ReMeas.list <- list()
 for(i in 1:num.meas){
   plot.SORTIE.meas <- tree.dat[samp_id==plot.SORTIE & meas_no==(i-1)]
   plot.SORTIE.meas[,LD_Group:=ifelse(ld=="L",1,ifelse(ld=="I",1,ifelse(ld=="V",1,2)))]
-  red.plot.SORTIE.meas <- plot.SORTIE.meas[,.(samp_id,meas_yr,phf_tree,sp_PSP,dbh,ld,LD_Group,age_bh,height)]
+  red.plot.SORTIE.meas <- plot.SORTIE.meas[,.(samp_id,meas_yr,phf_tree,sp_PSP,dbh,ld,LD_Group,age_tot,height,batree,baha)]
   #just live species
   main.plot.phf <- min(red.plot.SORTIE.meas[,phf_tree])
   ld.red.plot.SORTIE.meas <- red.plot.SORTIE.meas[LD_Group==1 & phf_tree==main.plot.phf]
