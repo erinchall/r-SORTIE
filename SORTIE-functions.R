@@ -2,7 +2,7 @@
 # Importing PSP data ------------------------------------------------------
 
 #Import sample and then tree data
-import.psp <- function(dat.type, tsas){
+import.psp <- function(r.path, dat.type, tsas){
   read.list <- list()
   dat.list <- list()
   for(i in 1:length(dat.type)){
