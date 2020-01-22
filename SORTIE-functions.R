@@ -42,19 +42,61 @@ SORTIE.tree.create <- function(sizeClasses,SORTIE.species,Min.Adult.DBH,Max.Seed
   return(SORTIE.tree.dat)
 }
 
+#  Summarize PSP data ---------------------------------------------------------------
+#This assumes the min phf is the main plot
+psp.meas <- function(tree.dat,study.plots,num.meas){
+  Plot.ReMeas.list <- list()
+  for(i in 1:num.meas){
+    study.plots.meas <- tree.dat[samp_id==study.plots & meas_no==(i-1)]
+    study.plots.meas[,LD_Group:=ifelse(ld=="L",1,ifelse(ld=="I",1,ifelse(ld=="V",1,2)))]
+    red.study.plots.meas <- study.plots.meas[,.(samp_id,meas_yr,meas_no,phf_tree,sp_PSP,dbh,ld,LD_Group,age_tot,height,batree,baha)]
+    #just live species
+    main.plot.phf <- min(red.study.plots.meas[,phf_tree])
+    ld.red.study.plots.meas <- red.study.plots.meas[LD_Group==1 & phf_tree==main.plot.phf]
+    Plot.ReMeas.list[[i]] <- red.study.plots.meas[phf_tree==main.plot.phf]
+  }
+  Plot.ReMeas.tab <- rbindlist(Plot.ReMeas.list)
+  return(Plot.ReMeas.tab)
+}
 
 # Stems/ha defined by SORTIE DBH classes ----------------------------------
+create.SORTIE.DBH.classes <- function(sizeClasses,SORTIE.tree.dat,all.meas.plot.SORTIE, main.plot.phf){
+  meas.no <- unique(all.meas.plot.SORTIE[,meas_no])
+  SORTIE.tree.dat.list <- list()
+  for(i in 1: length(meas.no)){
+    yr.meas.sortis <- all.meas.plot.SORTIE[meas_no==i-1]
+    
+    for(j in 1:length(sizeClasses)){
+      yr.meas.sortis[dbh <= sizeClasses[j] & dbh > sizeClasses[j]-2,DBH_bin := j]
+    }
+    tree.per.bin <- yr.meas.sortis[,.N, by=.(DBH_bin,sp_PSP)] 
+    tree.per.bin[,Trees.per.ha := N*main.plot.phf[1]]
+    setkey(tree.per.bin,sp_PSP,DBH_bin)
+    
+    SORTIE.tree.dat.list[[i]] <- SORTIE.tree.dat
+    
+    for(k in 1:nrow(tree.per.bin)){
+      SORTIE.tree.dat.list[[i]][6+tree.per.bin[k,DBH_bin],tree.conv.table[PSP.species==tree.per.bin[k,sp_PSP],SORTIE.species]] <- tree.per.bin[k,Trees.per.ha]
+    }
+  }
+  return(SORTIE.tree.dat.list)
+}
 
-create.SORTIE.DBH.classes <- function(tree.dat,num.meas,sizeClasses,SORTIE.tree.dat,plot.SORTIE){
-  out.list <- list()
-  for(r in 1:length(plot.SORTIE)){
+
+
+
+# Stems/ha defined by SORTIE DBH classes ----------------------------------
+#(should modify to allow flexbility in live, dead etc.)
+old.create.SORTIE.DBH.classes <- function(tree.dat,num.meas,sizeClasses,SORTIE.tree.dat,plot.SORTIE){
+  #out.list <- list()
+  #for(r in 1:length(plot.SORTIE)){
     SORTIE.tree.dat.list <- list()
     Plot.ReMeas.MainPlot.list <- list()
     Plot.ReMeas.list <- list()
     red.plot.SORTIE.meas.list <- list()
-    ind.num <- num.meas[r]
-    for(i in 1:ind.num){
-      plot.SORTIE.meas <- tree.dat[samp_id==plot.SORTIE[r] & meas_no==(i-1)]
+    #ind.num <- num.meas[r]
+    for(i in 1:num.meas){
+      plot.SORTIE.meas <- tree.dat[samp_id==plot.SORTIE & meas_no==(i-1)]
       plot.SORTIE.meas[,LD_Group:=ifelse(ld=="L",1,ifelse(ld=="I",1,ifelse(ld=="V",1,2)))]
       red.plot.SORTIE.meas <- plot.SORTIE.meas[,.(samp_id,meas_yr,phf_tree,sp_PSP,dbh,ld,LD_Group,age_bh,height)]
       red.plot.SORTIE.meas.list[[i]] <- red.plot.SORTIE.meas
@@ -74,17 +116,16 @@ create.SORTIE.DBH.classes <- function(tree.dat,num.meas,sizeClasses,SORTIE.tree.
         SORTIE.tree.dat.list[[i]][6+tree.per.bin[k,DBH_bin],tree.conv.table[PSP.species==tree.per.bin[k,sp_PSP],SORTIE.species]] <- tree.per.bin[k,Trees.per.ha]
       }
     }
-    out.list[[r]] <- SORTIE.tree.dat.list
-  }
-  return(out.list)
+    return(SORTIE.tree.dat.list)
+  #}
+  #return(out.list)
 }
 
 # Import SORTIE outputs ---------------------------------------------------
-
-import.SORTIE.output <- function(yr,folder.path,root.name){
+#should change the import function allow flexibility of a numeric value (all years) or a vector of specific years
+import.SORTIE.output <- function(yr,folder.path,fl.name){
   dt_sites2 <- list()
   setwd(folder.path)
-  fl.name <- paste0(root.name,"_det_")
   dt_list <- list()
   dt <- data.table()
   yr <- yr
@@ -94,6 +135,7 @@ import.SORTIE.output <- function(yr,folder.path,root.name){
     dt_list[i] <- list(dt)
   }
   dt_sites2 <- rbindlist(dt_list)
+  return(dt_sites2)
 }
 
 #for more than one folder at a time:
@@ -113,3 +155,11 @@ dt_list[i] <- list(dt)
 }
 dt_sites2[[j]] <- rbindlist(dt_list)
 }'
+
+
+
+# PSP species clean-up ----------------------------------------------------
+#write this out to make a change species label - NOT DONE!
+#sp.table <- data.table(Old=c("SW","P"),New=c("SX","PL"))
+#psp.dat[[2]][,sp_PSP:=ifelse(species==sp.table[,Old],sp.table[,New],species)]
+
