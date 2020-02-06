@@ -16,6 +16,70 @@ import.psp <- function(r.path, dat.type, tsas){
 }
 
 
+# Clean species labels ----------------------------------------------------
+clean.sp.labels <- function(tree.dat){
+  tree.dat[,sp_PSP:=ifelse(species=="SW","SX",
+                           ifelse(species=="S","SX",
+                                  ifelse(species=="B","BL",
+                                         ifelse(species =="DM","D",
+                                                ifelse(species=="DR","D",
+                                                       ifelse(species=="AC","AT",
+                                                              species))))))]
+  return(tree.dat)
+}
+
+# Selecting and cleaning PSP data -----------------------------------------
+sel.psp <- function(samples.dt,tree.dat,BECzone,BEClabel,SiteSeriesOfInterest,MinRemeasInterval){
+  # Remove repeats (which I think represent sub-plots)
+  uni.samples.dt<-unique(samples.dt, by="SAMP_ID")
+  #create the list of criteria needed to determine whether a plot should be included. This assumes that coding is consistent 
+  if(!is.null(BECzone)){criteria.samples <- uni.samples.dt[bgc_zone==BECzone & bgc_ss_grd>0] #02
+  } else{criteria.samples <- uni.samples.dt[beclabel_grd == BEClabel & bgc_ss_grd>0]} #05/06
+  remeas.samples <- criteria.samples[(criteria.samples[,meas_yr_first]!=criteria.samples[,meas_yr_last])]
+  remeas.samples <- remeas.samples[tot_period>=MinRemeasInterval & treatment != "THINNED" & stnd_org!="P"]
+  plot.SORTIE <- unique(remeas.samples[bgc_ss_grd==SiteSeriesOfInterest]$SAMP_ID)
+  
+  #remove plots based on composition: actually just need to remove from plotID
+  # c("XC","CW")
+  #plot.SORTIE <- tree.dat[samp_id %in% ]
+  #setkey(tree.dat)
+  #remove plots based on composition: actually just need to remove from plotID
+  #rm.plot <- unique(tree.dat[which(tree.dat[,species==.("XC","CW")]),.(samp_id)])
+  #tree.dat <- tree.dat[!rm.plot]
+  
+  return(plot.SORTIE)
+}
+
+
+# Calculate number of years and age for a PSP run -------------------------
+
+psp.years.age <- function(plot.SORTIE,tree.dat,samples.dt,age.crit){
+  #make the right output for print functions
+  psp.dets <- list()
+  sp_comp_list <-list()
+  #num.meas <- vector()
+  #main.plot.phf <- vector()
+  #run_years <- vector()
+  for(i in 1:length(plot.SORTIE)){
+    num.meas <- length(unique(tree.dat[samp_id==plot.SORTIE[i],meas_no]))
+    main.plot.phf <- min(tree.dat[samp_id==plot.SORTIE[i]]$phf_tree)
+    sp_comp <- table(tree.dat[samp_id==plot.SORTIE[i],sp_PSP])
+    #unique(samples.dt[SAMP_ID==plot.SORTIE[i]]$beclabel_grd)
+    age <- max(na.omit(tree.dat[samp_id==plot.SORTIE[i]&meas_no==0]$age_tot))
+    run_years <- max(samples.dt[SAMP_ID==plot.SORTIE[i],meas_yr])-min(samples.dt[SAMP_ID==plot.SORTIE[i],meas_yr])
+    psp.dets$plotid[i] <- plot.SORTIE[i]
+    psp.dets$main.plot.phf[i] <- main.plot.phf
+    psp.dets$num.meas[i] <- num.meas
+    psp.dets$run.years[i] <- run_years
+    psp.dets$age[i] <- age
+    sp_comp_list[[i]] <- sp_comp
+  }
+  psp.dets[[6]] <- sp_comp_list
+  return(psp.dets)
+  #return(num.meas)
+}
+
+
 # Create initial tree population table ------------------------------------
 
 SORTIE.tree.create <- function(sizeClasses,SORTIE.species,Min.Adult.DBH,Max.Seedling.Hgt.m){
@@ -49,7 +113,7 @@ psp.meas <- function(tree.dat,study.plots,num.meas){
   for(i in 1:num.meas){
     study.plots.meas <- tree.dat[samp_id==study.plots & meas_no==(i-1)]
     study.plots.meas[,LD_Group:=ifelse(ld=="L",1,ifelse(ld=="I",1,ifelse(ld=="V",1,2)))]
-    red.study.plots.meas <- study.plots.meas[,.(samp_id,meas_yr,meas_no,phf_tree,sp_PSP,dbh,ld,LD_Group,age_tot,height,batree,baha)]
+    red.study.plots.meas <- study.plots.meas[,.(samp_id,tree_no,meas_yr,meas_no,phf_tree,sp_PSP,dbh,ld,LD_Group,age_tot,height,batree,baha)]
     #just live species
     main.plot.phf <- min(red.study.plots.meas[,phf_tree])
     ld.red.study.plots.meas <- red.study.plots.meas[LD_Group==1 & phf_tree==main.plot.phf]
