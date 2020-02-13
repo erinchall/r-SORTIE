@@ -134,7 +134,7 @@ create.SORTIE.DBH.classes <- function(sizeClasses,SORTIE.tree.dat,all.meas.plot.
       yr.meas.sortis[dbh <= sizeClasses[j] & dbh > sizeClasses[j]-2,DBH_bin := j]
     }
     tree.per.bin <- yr.meas.sortis[,.N, by=.(DBH_bin,sp_PSP)] 
-    tree.per.bin[,Trees.per.ha := N*main.plot.phf[1]]
+    tree.per.bin[,Trees.per.ha := N*main.plot.phf]
     setkey(tree.per.bin,sp_PSP,DBH_bin)
     
     SORTIE.tree.dat.list[[i]] <- SORTIE.tree.dat
