@@ -33,7 +33,7 @@ sel.psp <- function(samples.dt,tree.dat,BECzone,BEClabel,SiteSeriesOfInterest,Mi
   # Remove repeats (which I think represent sub-plots)
   uni.samples.dt<-unique(samples.dt, by="SAMP_ID")
   #create the list of criteria needed to determine whether a plot should be included. This assumes that coding is consistent 
-  if(!is.null(BECzone)){criteria.samples <- uni.samples.dt[bgc_zone==BECzone & bgc_ss_grd>0] #02
+  if(!is.null(BECzone)){criteria.samples <- uni.samples.dt[bgc_zone ==BECzone & bgc_ss_grd>0] #02
   } else{criteria.samples <- uni.samples.dt[beclabel_grd == BEClabel & bgc_ss_grd>0]} #05/06
   remeas.samples <- criteria.samples[(criteria.samples[,meas_yr_first]!=criteria.samples[,meas_yr_last])]
   remeas.samples <- remeas.samples[tot_period>=MinRemeasInterval & treatment != "THINNED" & stnd_org!="P"]
