@@ -62,7 +62,7 @@ psp.years.age <- function(plot.SORTIE,tree.dat,samples.dt,age.crit){
   #run_years <- vector()
   for(i in 1:length(plot.SORTIE)){
     num.meas <- length(unique(tree.dat[samp_id==plot.SORTIE[i],meas_no]))
-    main.plot.phf <- min(tree.dat[samp_id==plot.SORTIE[i]]$phf_tree)
+    main.plot.phf <- min(na.omit(tree.dat[samp_id==plot.SORTIE[i]]$phf_tree))
     sp_comp <- table(tree.dat[samp_id==plot.SORTIE[i],sp_PSP])
     #unique(samples.dt[SAMP_ID==plot.SORTIE[i]]$beclabel_grd)
     age <- max(na.omit(tree.dat[samp_id==plot.SORTIE[i]&meas_no==0]$age_tot))
