@@ -113,7 +113,9 @@ psp.meas <- function(tree.dat,study.plots,num.meas){
   for(i in 1:num.meas){
     study.plots.meas <- tree.dat[samp_id==study.plots & meas_no==(i-1)]
     study.plots.meas[,LD_Group:=ifelse(ld=="L",1,ifelse(ld=="I",1,ifelse(ld=="V",1,2)))]
-    red.study.plots.meas <- study.plots.meas[,.(samp_id,tree_no,meas_yr,meas_no,phf_tree,sp_PSP,dbh,ld,LD_Group,age_tot,height,batree,baha)]
+    red.study.plots.meas <- study.plots.meas[,.(samp_id,tree_no,meas_yr,meas_no,phf_tree,sp_PSP,dbh,ld,
+                                                LD_Group,age_tot,height,batree,baha,volwsv,volcu10m,
+                                                volcu15m,wsvha,gmv10ha,gmv15ha,nmv10ha,nmv15ha)]
     #just live species
     main.plot.phf <- min(red.study.plots.meas[,phf_tree])
     ld.red.study.plots.meas <- red.study.plots.meas[LD_Group==1 & phf_tree==main.plot.phf]
