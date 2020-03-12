@@ -52,24 +52,6 @@ sel.psp <- function(samples.dt,tree.dat,BECzone,BEClabel,SiteSeriesOfInterest,Mi
 
 
 # Calculate number of years and age for a PSP run -------------------------
-num.meas <- vector()
-main.plot.phf <- vector()
-plots.each.meas <- list()
-for(i in 1:length(plot.SORTIE)){
-  num.meas[i] <- length(unique(tree.dat[samp_id==plot.SORTIE[i],meas_no]))
-  for(j in 1:num.meas[i]){
-    main.plot.phf[j] <- min(na.omit(tree.dat[samp_id==plot.SORTIE[i] & meas_no==(j-1)]$phf_tree))
-  }
-  plots.each.meas[[i]] <- main.plot.phf
-  print(table(tree.dat[samp_id==plot.SORTIE[i],sp_PSP]))
-  print(unique(samples.dt[SAMP_ID==plot.SORTIE[i]]$beclabel_grd))
-  print(max(na.omit(tree.dat[samp_id==plot.SORTIE[i]&meas_no==0]$age_tot)))
-}
-run_years <- vector()
-for(i in 1:length(plot.SORTIE)){
-  run_years[i] <- max(samples.dt[SAMP_ID==plot.SORTIE[i],meas_yr])-min(samples.dt[SAMP_ID==plot.SORTIE[i],meas_yr])
-}
-
 psp.years.age <- function(plot.SORTIE,tree.dat,samples.dt,age.crit){
   #make the right output for print functions
   psp.dets <- list()
