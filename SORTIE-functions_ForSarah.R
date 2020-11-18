@@ -7,39 +7,9 @@ experiment_design <- function(Level1,Level2,Replicates){
   return(exp_des)
 }
 
-#Import all years of a SORTIE run
-import.SORTIE.output <- function(yr,folder.path,fl.name){
-  dt_sites2 <- list()
-  dt_list <- list()
+#Import selected years of a SORTIE run
+importSORTie <- function(yrs,folder.path,fl.name,param_ver,plotID){
   dt <- data.table()
-  yr <- yr
-  for(i in 1:(yr+1)){
-    dt <- fread(paste0(folder.path,fl.name,i-1), sep="\t", header=T,na.strings = "--", skip=1)
-    dt[, timestep := i-1]
-    dt_list[i] <- list(dt)
-  }
-  dt_sites2 <- rbindlist(dt_list)
-  return(dt_sites2)
-}
-
-#Import selected years (= yrs object) from a SORTIE run
-import_Yrs_SORTIE <- function(yrs,folder.path,fl.name){
-  dt_sites2 <- list()
-  dt_list <- list()
-  dt <- data.table()
-  yrs <- yrs
-  for(i in 1:length(yrs)){
-    dt <- fread(paste0(folder.path,fl.name,yrs[i]), sep="\t", header=T,na.strings = "--", skip=1)
-    dt[, timestep := yrs[i]]
-    dt_list[i] <- list(dt)
-  }
-  dt_sites2 <- rbindlist(dt_list)
-  return(dt_sites2)
-}
-
-importSORTIE <- function(yrs,folder.path,fl.name,param_ver,plotID){
-  dt <- data.table()
-  dt_table <- data.table()
   for(i in 1:length(yrs)){
     dt <- fread(paste0(folder.path,fl.name,yrs[i]), sep="\t", header=T,na.strings = "--", skip=1)
     dt[, ':='(timestep = yrs[i],param_ver = param_ver, plotID=plotID)]
@@ -54,9 +24,9 @@ import.psp <- function(r.path, dat.type, tsas){
   read.list <- list()
   dat.list <- list()
   for(i in 1:length(dat.type)){
-    #setwd(paste0(r.path,dat.type[i]))
+    setwd(paste0(r.path,dat.type[i]))
     for(j in 1:length(tsas)){
-      read.list[[j]]<- fread(paste0(r.path,dat.type[i],"/","TSA",tsas[j],".csv"))
+      read.list[[j]]<- fread(paste0("TSA",tsas[j],".csv"))
     }
     dat.list[[i]] <- rbindlist(read.list)
   }
@@ -204,14 +174,14 @@ psp.meas <- function(tree.dat,study.plots){
 
 
 # Stems/ha defined by SORTIE DBH classes ----------------------------------
-create.SORTIE.DBH.classes <- function(sizeClasses,dbhclassSize,SORTIE.tree.dat,all.meas.plot.SORTIE, main.plot.phf){
+create.SORTIE.DBH.classes <- function(sizeClasses,SORTIE.tree.dat,all.meas.plot.SORTIE, main.plot.phf){
   meas.no <- unique(all.meas.plot.SORTIE[,meas_no])
   SORTIE.tree.dat.list <- list()
   for(i in 1: length(meas.no)){
     yr.meas.sortis <- all.meas.plot.SORTIE[meas_no==i-1]
     
     for(j in 1:length(sizeClasses)){
-      yr.meas.sortis[dbh <= sizeClasses[j] & dbh > sizeClasses[j]-dbhclassSize,DBH_bin := j]
+      yr.meas.sortis[dbh <= sizeClasses[j] & dbh > sizeClasses[j]-2,DBH_bin := j]
     }
     tree.per.bin <- yr.meas.sortis[,.N, by=.(DBH_bin,sp_PSP)] 
     tree.per.bin[,Trees.per.ha := N*main.plot.phf]
@@ -226,27 +196,6 @@ create.SORTIE.DBH.classes <- function(sizeClasses,dbhclassSize,SORTIE.tree.dat,a
   return(SORTIE.tree.dat.list)
 }
 
-create.SORTIE.DBH.classes.Meas0 <- function(sizeClasses,dbhclassSize,SORTIE.tree.dat,all.meas.plot.SORTIE, main.plot.phf){
-  #meas.no <- unique(all.meas.plot.SORTIE[,meas_no])
-  SORTIE.tree.dat.list <- list()
-  #for(i in 1: length(meas.no)){
-    yr.meas.sortis <- all.meas.plot.SORTIE[meas_no==0]
-    
-    for(j in 1:length(sizeClasses)){
-      yr.meas.sortis[dbh <= sizeClasses[j] & dbh > sizeClasses[j]-dbhclassSize,DBH_bin := j]
-    }
-    tree.per.bin <- yr.meas.sortis[,.N, by=.(DBH_bin,sp_PSP)] 
-    tree.per.bin[,Trees.per.ha := N*main.plot.phf]
-    setkey(tree.per.bin,sp_PSP,DBH_bin)
-    
-    SORTIE.tree.dat.list <- SORTIE.tree.dat
-    
-    for(k in 1:nrow(tree.per.bin)){
-      SORTIE.tree.dat.list[tree.per.bin[k,DBH_bin],tree.conv.table[PSP.species==tree.per.bin[k,sp_PSP],SORTIE.species]] <- tree.per.bin[k,Trees.per.ha]
-    }
-  #}
-  return(SORTIE.tree.dat.list)
-}
 
 
 
