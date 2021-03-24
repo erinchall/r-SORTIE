@@ -1,0 +1,157 @@
+InputFileParameterName,Type,code name,group name
+Timesteps,1,timesteps,
+Randomseed,1,randomSeed,
+YearsPerTimestep,1,yearsPerTimestep,
+rt_timestep,1,rt_timestep,
+randomSeed,1,randomSeed,
+yearsPerTimestep,1,yearsPerTimestep,
+plot_lenX,1,plot_lenX,
+plot_lenY,1,plot_lenY,
+plot_latitude,1,plot_latitude,
+plot_precip_mm_yr,1,plot_precip_mm_yr,
+plot_seasonal_precipitation,1,plot_seasonal_precipitation,
+plot_water_deficit,1,plot_water_deficit,
+plot_temp_C,1,plot_temp_C,
+plot_n_dep,1,plot_n_dep,
+plot_title,1,sph,plot_title, 
+!nci
+nciWhichShadingEffect,3,  nciWhichShadingEffect,
+nciWhichCrowdingEffect,3,  nciWhichCrowdingEffect,
+nciWhichNCITerm,3,  nciWhichNCITerm,
+nciWhichSizeEffect,3,  nciWhichSizeEffect,
+nciWhichDamageEffect,3,  nciWhichDamageEffect,
+nciWhichPrecipitationEffect,3,  nciWhichPrecipitationEffect,
+nciWhichTemperatureEffect,3,  nciWhichTemperatureEffect,
+nciWhichNitrogenEffect,3,  nciWhichNitrogenEffect,
+nciWhichInfectionEffect,3,  nciWhichInfectionEffect,
+NCI.MaxGrowth,4,gr_nmpgVal species,  gr_nciMaxPotentialGrowth
+Std.Dev.Norm.Log.Adj,4,gr_sdVal species, gr_standardDeviation
+NCI.Shading.Coeff.m,4,nscVal species,  nciShadingCoefficient
+NCI.Shading.Exp.n,4,nseVal species,  nciShadingExponent
+NCI.Size.Sensit,4,ncgVal species,  nciCrowdingGamma
+NCI.Crowd.Slope.C,4,nccVal species,  nciCrowdingC
+NCI.Crowd.Steep.D,4,ncdVal species,  nciCrowdingD
+NCI.Max.Crowd.Dist,4,nmcrVal species,  nciMaxCrowdingRadius
+NCI.Alpha,4,naVal species,  nciAlpha
+NCI.Beta,4,nbVal species,  nciBeta
+NCI.DBH.div,3,nciDbhDivisor,
+nciIncludeSnagsInNCI,3,nciIncludeSnagsInNCI,
+Spruce.NCI.Lambda,4,nlVal species,  nciInterior_SpruceNeighborLambda
+Pine.NCI.Lambda,4,nlVal species,  nciLodgepole_PineNeighborLambda
+NCI.Min.Neigh.DBH,4,nmndVal species,  nciMinNeighborDBH
+NCI.Damage.Com,4,nnsefdVal species,  nciNeighStormEffFullDmg
+NCI.Damage.Med,4,nnsemdVal species,  nciNeighStormEffMedDmg
+NCI.Size.Mode.Xo,4,nsex0Val species,  nciSizeEffectX0
+NCI.Size.Var.Xb,4,nsexbVal species,  nciSizeEffectXb
+NCI.Neigh.Storm.Damage.Comp,4,nsefdVal species,  nciStormEffFullDmg
+NCI.Neigh.Storm.Damage.Med,4,nsemdVal species,  nciStormEffMedDmg
+Fir.NCI.Lambda,4,nlVal species,  nciSubalpine_FirNeighborLambda
+Aspen.NCI.Lambda,4,nlVal species,  nciTrembling_AspenNeighborLambda
+!allometry
+gr_stochGrowthMethod,3,gr_stochGrowthMethod,
+tr_whatAdultHeightDiam,2,tr_wahdVal, 
+tr_whatSaplingHeightDiam,2,tr_wsahdVal, 
+tr_whatSeedlingHeightDiam,2,tr_wsehdVal, 
+tr_whatAdultCrownRadDiam,2,tr_wacrdVal, 
+tr_whatSaplingCrownRadDiam,2,tr_wscrdVal, 
+tr_whatAdultCrownHeightHeight,2,tr_wachhVal, 
+tr_whatSaplingCrownHeightHeight,2,tr_wschhVal, 
+tr_canopyHeight,2,tr_chVal, 
+tr_stdAsympCrownRad,2,tr_sacrVal, 
+tr_stdCrownRadExp,2,tr_screVal, 
+tr_stdMaxCrownRad,2,tr_smcrVal, 
+tr_stdAsympCrownHt,2,tr_sachVal, 
+tr_stdCrownHtExp,2,tr_scheVal, 
+tr_conversionDiam10ToDBH,2,tr_cdtdVal, 
+tr_interceptDiam10ToDBH,2,tr_idtdVal, 
+tr_slopeOfAsymHeight,2,tr_soahVal, 
+tr_slopeOfHeight-Diam10,2,tr_sohdVal, 
+tr_adultLinearSlope,2,tr_alsVal, 
+tr_adultLinearIntercept,2,tr_aliVal, 
+tr_adultReverseLinearSlope,2,tr_arlsVal, 
+tr_adultReverseLinearIntercept,2,tr_arliVal, 
+tr_saplingLinearSlope,2,tr_salsVal, 
+tr_saplingLinearIntercept,2,tr_saliVal, 
+tr_saplingReverseLinearSlope,2,tr_sarlsVal, 
+tr_saplingReverseLinearIntercept,2,tr_sarliVal, 
+tr_saplingPowerA,2,tr_sapaVal, 
+tr_saplingPowerB,2,tr_sapbVal, 
+tr_seedlingLinearSlope,2,tr_selsVal, 
+tr_seedlingLinearIntercept,2,tr_seliVal, 
+tr_seedlingReverseLinearSlope,2,tr_serlsVal, 
+tr_seedlingReverseLinearIntercept,2,tr_serliVal, 
+tr_chRichCrownRadIntercept,2,tr_crcriVal, 
+tr_chRichCrownRadAsymp,2,tr_crcraVal, 
+tr_chRichCrownRadShape1b,2,tr_crcrs1bVal, 
+tr_chRichCrownRadShape2c,2,tr_crcrs2cVal, 
+tr_chRichCrownHtIntercept,2,tr_crchiVal, 
+tr_chRichCrownHtAsymp,2,tr_crchaVal, 
+tr_chRichCrownHtShape1b,2,tr_crchs1bVal, 
+tr_chRichCrownHtShape2c,2,tr_crchs2cVal, 
+tr_nciCRMinNeighborDBH,2,tr_ncrmndVal, 
+tr_nciCDMinNeighborDBH,2,tr_ncdmndVal, 
+!harvest
+low,7,ds_low,
+high,7,ds_high,
+amountToCut,7,ds_amountToCut,
+!output
+ShortOutput,5,so_filename,
+Output,5,ou_filename,
+!Light stuff (first GLIMapCreator4 stuff then GLILight6 stuff, then SailLight7)
+!     note most are type 3 so you must include the Behaviour list name on the previus line
+numAziGrids, 3, li_numAziGrids,
+numAltGrids, 3, li_numAltGrids,
+minSunAngle, 3, li_minSunAngle,
+mapLightHeight, 3,li_mapLightHeight,
+heightOfFishEyePhoto, 3,li_heightOfFishEyePhoto,
+skyMaskAngle, 1, li_skyMaskAngle, 
+maxShadingRadius, 1, li_maxShadingRadius, 
+crownFracOfHeight, 1, li_crownFracOfHeight, 
+!other
+Min.Adult.DBH,2,tr_madVal species,
+Max.Seedling.Hgt.m, 2, tr_mshVal species,
+Seedling.Hgt.Class.1, 1, tr_seedlingHeightClass1,
+Seedling.Hgt.Class.2, 1, tr_seedlingHeightClass2,
+Init.Dens.Seedling.Hgt.Class.1, 2, tr_sh1dVal species,
+Init.Dens.Seedling.Hgt.Class.2, 2, tr_sh2dVal species,
+Init.Dens.Seedling.Hgt.Class.3, 2, tr_sh3dVal species,
+Seedling.Diam.10,1, tr_seedDiam10Cm
+Init.Dens.4,6,tr_initialDensity sizeClass="s4.0",tr_idVals 
+Init.Dens.6,6,tr_initialDensity sizeClass="s6.0",tr_idVals 
+Init.Dens.8,6,tr_initialDensity sizeClass="s8.0",tr_idVals 
+Init.Dens.10,6,tr_initialDensity sizeClass="s10.0",tr_idVals 
+Init.Dens.12,6,tr_initialDensity sizeClass="s12.0",tr_idVals 
+Init.Dens.14,6,tr_initialDensity sizeClass="s14.0",tr_idVals 
+Init.Dens.16,6,tr_initialDensity sizeClass="s16.0",tr_idVals 
+Init.Dens.18,6,tr_initialDensity sizeClass="s18.0",tr_idVals 
+Init.Dens.20,6,tr_initialDensity sizeClass="s20.0",tr_idVals 
+Init.Dens.22,6,tr_initialDensity sizeClass"=s22.0",tr_idVals 
+Init.Dens.24,6,tr_initialDensity sizeClass"=s24.0",tr_idVals 
+Init.Dens.26,6,tr_initialDensity sizeClass"=s26.0",tr_idVals 
+Init.Dens.28,6,tr_initialDensity sizeClass"=s28.0",tr_idVals 
+Init.Dens.30,6,tr_initialDensity sizeClass"=s30.0",tr_idVals 
+Init.Dens.32,6,tr_initialDensity sizeClass"=s32.0",tr_idVals 
+Init.Dens.34,6,tr_initialDensity sizeClass"=s34.0",tr_idVals 
+Init.Dens.36,6,tr_initialDensity sizeClass"=s36.0",tr_idVals 
+Init.Dens.38,6,tr_initialDensity sizeClass"=s38.0",tr_idVals 
+Init.Dens.40,6,tr_initialDensity sizeClass"=s40.0",tr_idVals 
+Init.Dens.42,6,tr_initialDensity sizeClass"=s42.0",tr_idVals 
+Init.Dens.44,6,tr_initialDensity sizeClass"=s44.0",tr_idVals 
+Init.Dens.46,6,tr_initialDensity sizeClass"=s46.0",tr_idVals 
+Init.Dens.48,6,tr_initialDensity sizeClass"=s48.0",tr_idVals 
+Init.Dens.50,6,tr_initialDensity sizeClass"=s50.0",tr_idVals 
+Init.Dens.52,6,tr_initialDensity sizeClass"=s52.0",tr_idVals 
+Init.Dens.54,6,tr_initialDensity sizeClass"=s54.0",tr_idVals 
+Init.Dens.56,6,tr_initialDensity sizeClass"=s56.0",tr_idVals 
+Init.Dens.58,6,tr_initialDensity sizeClass"=s58.0",tr_idVals 
+Init.Dens.60,6,tr_initialDensity sizeClass"=s60.0",tr_idVals 
+Init.Dens.62,6,tr_initialDensity sizeClass"=s62.0",tr_idVals 
+Init.Dens.64,6,tr_initialDensity sizeClass"=s64.0",tr_idVals 
+Init.Dens.66,6,tr_initialDensity sizeClass"=s66.0",tr_idVals 
+Init.Dens.68,6,tr_initialDensity sizeClass"=s68.0",tr_idVals 
+Init.Dens.70,6,tr_initialDensity sizeClass"=s70.0",tr_idVals 
+Init.Dens.72,6,tr_initialDensity sizeClass"=s72.0",tr_idVals 
+Init.Dens.74,6,tr_initialDensity sizeClass"=s74.0",tr_idVals 
+Init.Dens.76,6,tr_initialDensity sizeClass"=s76.0",tr_idVals 
+Init.Dens.78,6,tr_initialDensity sizeClass"=s78.0",tr_idVals 
+Init.Dens.80,6,tr_initialDensity sizeClass"=s80.0",tr_idVals 

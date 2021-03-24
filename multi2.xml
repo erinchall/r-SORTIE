@@ -1,0 +1,11 @@
+ <StochasticMortality8>
+    -999
+  </StochasticMortality8>
+  <StochasticMortality9>
+    <mo_stochasticMortRate>
+      <mo_smrVal species="Interior_Spruce">111</mo_smrVal>
+      <mo_smrVal species="Lodgepole_Pine">111</mo_smrVal>
+      <mo_smrVal species="Subalpine_Fir">111</mo_smrVal>
+      <mo_smrVal species="Trembling_Aspen">111</mo_smrVal>
+    </mo_stochasticMortRate>
+  </StochasticMortality9>
