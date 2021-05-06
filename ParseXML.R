@@ -121,7 +121,7 @@ ParseXML <- function(xmlname)
   # build list object to export individual tree data
   build_list_in_loop <- list()
   
-  print("Reading tree data")
+  #print("Reading tree data")
   
   
   # Loop through each tree header group
@@ -341,7 +341,7 @@ ParseMap <-function(grid_data)
     # build list object to export individual items
     map_list <- list()
     
-    print("Reading map data")
+    #print("Reading map data")
     
     # Loop through each map header
     j <- 0

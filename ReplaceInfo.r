@@ -24,7 +24,7 @@ for (i in 3:nrow(pf1)) {
   iline <- grep(exactParamName,VariableNames[,1])
   itype <- as.numeric(VariableNames[iline,2])             #ensures that itype is a number, with no blank
   
-  print(paste("Looking for Variable: ", paramName, " of type ", itype))
+  #print(paste("Looking for Variable: ", paramName, " of type ", itype))
   
   #codename <- trimws(VariableNames[iline,3])              #removes any whitespace before and after the variable name
   codename <- gsub("\"","",trimws(VariableNames[iline,3]))  ##AC change
@@ -46,7 +46,7 @@ for (i in 3:nrow(pf1)) {
       }
       ln1 <- FindFileLine(rf,itype,codename, groupname, mastergroup)
     
-      print(paste("Variable",codename," is on line: ", ln1))
+      #print(paste("Variable",codename," is on line: ", ln1))
     
       if (length(ln1) > 0) {
         if (itype == 5 ) {     #changing the output filename 
@@ -70,13 +70,13 @@ for (i in 3:nrow(pf1)) {
             isline <- FindFileLine(rf,itype,codename, groupname, mastergroup)
             if (isline > 0) {
               sp_present[jj] <- 1
-              print(paste("species ", codename, "is found" ))
+              #print(paste("species ", codename, "is found" ))
             }
           }
           #now we know which species are present and we know what lines have the information
           for (jj in 1:ncols) {
             if (sp_present[jj] >0) {
-              print(paste(ln1[jj], " species parameter ", pf1[i,jj+1] ))
+              #print(paste(ln1[jj], " species parameter ", pf1[i,jj+1] ))
               x <-ReplaceParameter(ln1[jj], rf, pf1[i,jj+1]) 
               rf <- x
             }
@@ -86,10 +86,10 @@ for (i in 3:nrow(pf1)) {
         }
         rf <- x
       } else
-        print(paste("Variable: ", codename , " not found."))
+        print(paste("WARNING! Variable: ", codename , " not found."))
     } 
   } else {
-    print(paste("The type of variable: ",paramName, " could not be determined"))
+    print(paste("WARNING! The type of variable: ",paramName, " could not be determined"))
   }
  
 }  #end of loop over lines of the parameter file
@@ -108,47 +108,47 @@ return(rf)
 ReplaceLines <- function(rf, pf1) {       #rf is the main file, pf1 is the parameter file
   
   #Find what group this file contains. #(Feb 2021) There is no longer the extra line at the top of the file
-  #firstline <- 1
+  firstline <- 1
 
-  #grouptext <- substring(pf1[firstline],str_locate(pf1[firstline], "<")+1,str_length(pf1[firstline])-1)[1]
+  grouptext <- substring(pf1[firstline],str_locate(pf1[firstline], "<")+1,str_length(pf1[firstline])-1)[1]
   
   #now remove the numbers from the end of the grouptext. Note that there can be more than 1 number (eg Plant24)
-#  gtext <- str_replace_all(grouptext, "[:digit:]", "")
+  gtext <- str_replace_all(grouptext, "[:digit:]", "")
   
   #If the grouptext is a harvest one, then we will do it differently than if it isn't 
   #This allows a chunk of harvest related code to have several different bits in it and they will all be replaced.
   
- # harvestext <- c("EpisodicMortality","SelectionHarvest","Harvest","Plant")
+  harvestext <- c("EpisodicMortality","SelectionHarvest","Harvest","Plant")
   
   #if (grouptext %in% harvestext) { 
- # if (gtext %in% harvestext) { 
-      #so now we know this is harvest. 
-    #Find the lines in the harvest file for each group listed above
-    
-  #  for (i in 1:length(harvestext)) { #added 1:length()
-   #   linegroup <- grep(harvestext[i],pf1) #AC: I added harvestext to index over, but not sure if this is right(SB: could be done either way. this way i is an index. The original way i was the text in the loop)
-      #print(linegroup)
-    #  if (length(linegroup)>0) {
-     #   in_harvest <- str_trim(str_replace_all(pf1[linegroup[1]],c("<"="",">"="")))  #get the actual name of the group we are replacing
-      #  lnm <- grep(in_harvest,rf)     #look for this text inside the main file. This should return two values: the beginning and end of the group
-        #print(i)
-        #print(paste(lnm, linegroup[1],linegroup[2], in_harvest))
-       # if (length(lnm)>0) {
-        #  x <- RemoveRow(lnm, rf)
-         # rf2 <- append(x,pf1[linegroup[1]:linegroup[2]],lnm[1]-1)
-          
-      #  }  else {
-       #   print(paste("the group: ",in_harvest,"was not found in the main file."))
-        #}
-        
-        #print(paste("appended the lines ",lnm[1]-1, linegroup[1]))
-      #  rf <- rf2
-      #}
-      
-    #}
-    
-  #}
-#  else {  
+  # if (gtext %in% harvestext) { 
+  #     #so now we know this is harvest. 
+  #   #Find the lines in the harvest file for each group listed above
+  #   
+  #   for (i in 1:length(harvestext)) { #added 1:length()
+  #     linegroup <- grep(harvestext[i],pf1) #AC: I added harvestext to index over, but not sure if this is right(SB: could be done either way. this way i is an index. The original way i was the text in the loop)
+  #     #print(linegroup)
+  #     if (length(linegroup)>0) {
+  #       in_harvest <- str_trim(str_replace_all(pf1[linegroup[1]],c("<"="",">"="")))  #get the actual name of the group we are replacing
+  #       lnm <- grep(in_harvest,rf)     #look for this text inside the main file. This should return two values: the beginning and end of the group
+  #       #print(i)
+  #       #print(paste(lnm, linegroup[1],linegroup[2], in_harvest))
+  #       if (length(lnm)>0) {
+  #         x <- RemoveRow(lnm, rf)
+  #         rf2 <- append(x,pf1[linegroup[1]:linegroup[2]],lnm[1]-1)
+  #         
+  #       }  else {
+  #         print(paste("the group: ",in_harvest,"was not found in the main file."))
+  #       }
+  #       
+  #       #print(paste("appended the lines ",lnm[1]-1, linegroup[1]))
+  #       rf <- rf2
+  #     }
+  #     
+  #   }
+  #   
+  # }
+  # else {  
     
     #loop through the file
     #    We will do a chunk, see if there is more, and do that, until it is all gone.

@@ -33,11 +33,11 @@ FindFileLine <- function(rf,itype, varname, vargroup, varmaster) {
             lng2 <- grep(varname,rf[stline:endline])  #this returns the line number within this group
           ln1 <- stline+lng2-1    # to get the overall line number
         } else {
-          print(paste("Variable Group:", vargroup, "not found."))
+          print(paste("WARNING! Variable Group:", vargroup, "not found."))
         }
       }
     } else {
-      print(paste("Master Variable:", varmaster, "not found."))
+      print(paste("WARNING! Master Variable:", varmaster, "not found."))
     }
   } else if (itype == 6) {   #Initial Density section 
     #For this type, we need to find the section with the right species.
@@ -52,7 +52,7 @@ FindFileLine <- function(rf,itype, varname, vargroup, varmaster) {
         ln1 <- lnm[1]+lng2[1]-1               # to get the overall line number
       }
     } else {
-      print(paste("Variable Group 6:", fullname, "not found."))
+      print(paste("WARNING! Variable Group 6:", fullname, "not found."))
     }
     
   } else if (itype == 7) {   #Harvest
@@ -67,11 +67,11 @@ FindFileLine <- function(rf,itype, varname, vargroup, varmaster) {
       }
       #print(paste("group line:", lnm, "start line: ", lng2))
     } else {
-      print(paste("Variable Group 7:", varmaster, "not found."))
+      print(paste("WARNING! Variable Group 7:", varmaster, "not found."))
     }
     
   } else {
-    print(paste("Variable,", varname, "with type:", itype, "is not a known type."))
+    print(paste("WARNING! Variable,", varname, "with type:", itype, "is not a known type."))
   }
 
   return(ln1)
@@ -200,8 +200,11 @@ RunSortie <-function(fname, sortie_loc) {
   
 }
 
-ExtractFiles <- function(itype,exname) {  #used for .gz.tar files - e.g., trees
-  #pass in the directory that contains one or more tar files.
+ExtractFiles <- function(itype,exname,onename) {  #used for .gz.tar files - e.g., trees
+  #itype: 1=extract only the given file, otherwise extract all files in the directory.
+  #exname: the directory that contains the tar file(s) to be extracted
+  #onename: the single tar file to extract (only used if itype=1)
+  
   #This program will then read the directory and extract all files from any tar files that are present
   #It also assumes that all the files in a single tar file were in the same directory. It looks at the
   #first file in the tar, determines how many subdirectories are present, and then strips all those subdirectories.
@@ -212,37 +215,35 @@ ExtractFiles <- function(itype,exname) {  #used for .gz.tar files - e.g., trees
   write("", file="runtar.bat")
   outdir <- exname
   extractDir <- paste0(outdir,"extracted")  #directory that will contain the extracted files
+  if (dir.exists(extractDir) & (itype != 1)) {
+    print("Target directory exists, so files will not be extracted.")
+    return(NULL)
+  }
+  
   dir.create(extractDir,showWarnings=FALSE)  #make the directory if it doesn't already exist
   
   if (itype != 1) {  #extract all the tar files in the directory
     FileList <- list.files(outdir,pattern="*.tar")
-    for (ix in 1:length(FileList)) { 
-      #first get a list of the files and find out how many directory levels down they are. Just check the first file.
-      ndir <- str_count(untar(paste0(outdir,FileList[ix]), compressed = TRUE, list=TRUE),pattern="/")
-      #untar(paste0(outdir,FileList[ix]),exdir=extractDir, compressed = TRUE, extras=paste0("--strip-components ",ndir[1]))
-      #untar(paste0(outdir,FileList[ix]),exdir=extractDir, compressed = TRUE)
-      cmd <-paste0("tar -xf \"",outdir,FileList[ix],"\""," --strip-components=",ndir," -C ",extractDir)
-      write(cmd, file="runtar.bat", append=FALSE)
-      system("runtar.bat")
-      
-      
-      FileList2 <- list.files(extractDir,pattern="*.gz",recursive=TRUE)
-      for (ix2 in 1:length(FileList2)) { 
-        cmd<-paste0("gzip -d \"",extractDir,"/",FileList2[ix2],"\"")
-        write(cmd, file="rungzip.bat", append=TRUE)
-      }
-    }
-  } else {
-    #THIS SECTION DOESN"T WORK RIGHT NOW
-    #one tar file only
-    #extract only 1 tar file
-    untar(exname, compressed = TRUE)
-    
-    #TODO: get a list of the untarred files and then send them to gzip below.
-    cmd<-paste("gzip -d \"C:/Projects/SORTIE/output/extracted/Projects/SORTIE/output/orig-t2_1.xml.gz\"")
-    #print(cmd)
-    write(cmd, file="rungzip.bat")
   }
+  else {
+    FileList <- list.files(outdir,pattern=onename)
+  }
+  for (ix in 1:length(FileList)) { 
+    #first get a list of the files and find out how many directory levels down they are. Just check the first file.
+    ndir <- str_count(untar(paste0(outdir,FileList[ix]), compressed = TRUE, list=TRUE),pattern="/")
+    #untar(paste0(outdir,FileList[ix]),exdir=extractDir, compressed = TRUE, extras=paste0("--strip-components ",ndir[1]))
+    #untar(paste0(outdir,FileList[ix]),exdir=extractDir, compressed = TRUE)
+    cmd <-paste0("tar -xf \"",outdir,FileList[ix],"\""," --strip-components=",ndir," -C ",extractDir)
+    write(cmd, file="runtar.bat", append=FALSE)
+    system("runtar.bat")
+    
+    FileList2 <- list.files(extractDir,pattern="*.gz",recursive=TRUE)
+    for (ix2 in 1:length(FileList2)) { 
+      cmd<-paste0("gzip -d \"",extractDir,"/",FileList2[ix2],"\"")
+      write(cmd, file="rungzip.bat", append=TRUE)
+    }
+  }
+
   system("rungzip.bat")
   FileList3 <- list.files(extractDir,pattern="*.xml",recursive=TRUE,full.names=TRUE)
   return(FileList3)
