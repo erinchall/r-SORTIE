@@ -8,7 +8,7 @@ source("Functions.r")
 source("ReplaceInfo.r")
 source("ParseXML.R")
 
-print("February 19, 2021")
+print("April 28, 2021")
 
 #VARIABLES THAT DECIDE WHAT ELSE RUNS
 bRunSortie <- 0     #0= do not run Sortie, 1= Run Sortie with newly made xml files
@@ -101,6 +101,7 @@ for (ix in 1:length(xmlList)) { #start loop over xml files
             xml2 <- gsub("//", "\\\\", xml2)    #turn any forward slashes into back into double backwards slashes
             #write the new file 
             newname <- paste(newname,".xml",sep="")
+            #newname <- "erin/debug2.xml"
             writeLines(xml2,newname)
             ListOfFiles <- c(ListOfFiles, newname)    #store the newly created file in a list so it can be run automatically later
           }
@@ -123,15 +124,16 @@ if (bRunSortie == 1) {
 ###############################################
 ###############################################
 if (bExtract == 1) {
-  #call a routine to extract all the files from a gz.tar file. These are the tree files.
+  #call a routine to extract all the files from a gz.tar file. 
   #Routine will return a list of the extracted files.
   
   #tell it whether to extract a single file (1) or a directory (0)
-  # and then pass it either the filename or the directory name
-  #NOTE: file version is not working quite right yet... SO ONLY USE THE DIRECTORY VERSION
+  # and then pass it the directory name and filename (if desired)
+  onefile <- ""       #Put a filename here if you want to extract only a single file instead of a directory
   
   OutputDir <- "C:/Projects/SORTIE/output/"  #TODO: get this output directory from the input file.
-  ListofExtractedFiles <- ExtractFiles(0, OutputDir )
+  #NOTE: ListOfExtractedFiles will be NULL if OutputDir exists.
+  ListofExtractedFiles <- ExtractFiles(0, OutputDir, onefile)
 }
 
 ###############################################
@@ -148,9 +150,11 @@ if (bParseXML ==1) {
     p <- paste0("_",YearsToExtract,".xml",collapse="|")
     r <- grepl(p,ListofExtractedFiles)  #this returns a true/false list of what to extract
     
+    ListofExtractedFiles <- c("Alana/ICH-A4-p_det_9.xml.gz")
+    r <- c(TRUE)
      for (ix in 1:length(ListofExtractedFiles)) { 
        if (r[ix]){
-         print(ListofExtractedFiles[ix])
+         #print(ListofExtractedFiles[ix])
          #output_df[ix] <- ParseXML(ListofExtractedFiles[ix])
          tmp <- ParseXML(ListofExtractedFiles[ix])
          assign (paste0("trees_",ix), tmp)  #this puts the tree information into a variable named eg trees_1.
@@ -167,7 +171,7 @@ if (bParseMaps == 1) {
   #TODO: loop over the output to read in multiple files
   
   #NOTE: right now, just manually give this a filename.
-    dat <- read_xml("temp_NCIFitCase.xml")
+    dat <- read_xml("Alana/ICH-A4-p_det_9.xml.gz")
   
   #Find a list of the different maps (because there can be more than one in the file).
   grid_loc <- xml_find_all(dat, ".//grid")
