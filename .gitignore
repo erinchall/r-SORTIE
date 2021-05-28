@@ -4,3 +4,6 @@ BaseParameterFiles/
 FileLists/
 ParameterValues/
 sourcefiles/
+*.xml
+old files delete maybe/
+VariableNames_example.csv
