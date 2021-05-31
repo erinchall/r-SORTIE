@@ -1,0 +1,10 @@
+type, name
+0,ss_mpby_en02_in5.xml
+0,ss_mpby_en1c_in5.xml
+0,ss_mpby_en01_in5.xml
+0,ss_mpby_en56_in5.xml
+1,g1_hps2.xml
+1,g2_hps2.xml
+1,g3_hps2.xml
+1,up_hps2.xml
+2,output.csv

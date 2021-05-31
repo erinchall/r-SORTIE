@@ -1,5 +1,11 @@
 rm(list=ls())
 
+#______  Apply Harvest patterns to SORTIE parameter files _________#
+#         May 31, 2021  E. Hall
+
+# Applies different MakeFiles depending on whether the BaseParameter file has MPB
+# applied (changes the position of the harvest & plant xml chunks)
+
 #library("xml2", lib.loc="C:/Program Files/R/R-3.6.0/library")
 #library("stringr", lib.loc="C:/Program Files/R/R-3.6.0/library")
 library("stringr")
@@ -29,7 +35,8 @@ sortie_loc = 0    #location of the Sortie executable. If 0, it is in the default
 
 #Start processing
 #read the list of files         NOTE: number of allowable file types = 5
-lstFiles <- read.csv(file.path(list_path, "files_ss1.txt"))
+for(in_n in 1:2){ #Add Loop to apply different MakeFiles and .xml chunks depending whether mpbn or mpby
+  lstFiles <- read.csv(file.path(list_path, paste0("files_ss", in_n, ".txt")))
 
 xmlList <- c()
 paramList1 <- vector("list",5)
@@ -114,6 +121,7 @@ for (ix in 1:length(xmlList)) { #start loop over xml files
     }
   }
 }
+} # close MakeFiles loop for creating mpbn vs mpby parameter files (mpby has harvest and plant in positions 2 and 23 instead of 1 and 22 for mpbn base files)
 
 ###############################################
 #Run the model with these files
