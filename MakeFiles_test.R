@@ -62,7 +62,7 @@ for (iii in 1:5) {
 #col 2: type
 #col 3: name in the line being replaced
 #col 4: group name 
-VariableNames <- read.csv(file.path(source_path, "VariableNames_4.csv"), header=TRUE, strip.white = TRUE)
+VariableNames <- read.csv(file.path(source_path, "VariableNames_pd.csv"), header=TRUE, strip.white = TRUE)
 
 ListOfFiles <- c()
 for (ix in 1:length(xmlList)) { #start loop over xml files
