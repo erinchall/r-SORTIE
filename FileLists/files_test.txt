@@ -1,5 +1,5 @@
 type, name
 0,ss_mpbn_en01_in1.xml
-1,g1_hps2.xml
+1,g2_hps2.xml
 2,plantspecs_in1.csv
 3,output.csv
