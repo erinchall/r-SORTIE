@@ -7,4 +7,4 @@ type, name
 1,g2_hps2.xml
 1,g3_hps2.xml
 1,up_hps2.xml
-2,output.csv
+2,outputLaptop.csv
