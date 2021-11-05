@@ -221,7 +221,7 @@ for(in_n in 1:5){ #Add Loop to apply different MakeFiles and .xml chunks dependi
           }
         }
       }
-    }  ListOfParFiles <- c(ListOfParFiles, newname)
+    }  
   }
 } # close MakeFiles loop for adding planting specs (species %) 
 
